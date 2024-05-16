@@ -36,9 +36,12 @@ export default function UserProvider({ children }) {
   );
 }
 
+const api = 'https://passenger-reward.onrender.com';
+
+
 export const registerUser = async (formData) => {
     try {
-        const response = await axios.post(`/api/users/signup`, formData,
+        const response = await axios.post(`${api}/api/users/signup`, formData,
             { headers: { 'Content-Type': 'application/json' } },
         );
         return response;
@@ -48,7 +51,6 @@ export const registerUser = async (formData) => {
     }
 };
 
-const api = 'https://passenger-reward.onrender.com';
 // const api = 'http://127.0.0.1:5000'
 export const loginUser = async (formData) => {
     try {
