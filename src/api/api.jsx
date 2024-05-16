@@ -47,9 +47,12 @@ export const registerUser = async (formData) => {
         throw error;
     }
 };
+
+const api = 'https://passenger-reward.onrender.com';
+// const api = 'http://127.0.0.1:5000'
 export const loginUser = async (formData) => {
     try {
-        const response = await axios.post(`/api/users/signin`, formData, { withCredentials: true });
+        const response = await axios.post(`${api}/api/users/signin`, formData, { withCredentials: true });
         return response;
     } catch (error) {
         throw error;
@@ -61,7 +64,7 @@ export const newTransaction = async (userData) => {
     const { userId, ...transactionData } = userData;
 
     try {
-        const response = await axios.post(`/api/transactions/new/${userId}`,  transactionData);
+        const response = await axios.post(`${api}/api/transactions/new/${userId}`,  transactionData);
         return response.data;
     } catch (error) {
         throw error;
@@ -69,7 +72,7 @@ export const newTransaction = async (userData) => {
 };
 export const getTransactions = async (userId) => {
     try {
-        const response = await axios.get(`/api/transactions/${userId}/all`);
+        const response = await axios.get(`${api}/api/transactions/${userId}/all`);
         return response;
     } catch (error) {
         console.log(error.response.data);
@@ -78,7 +81,7 @@ export const getTransactions = async (userId) => {
 };
 export const getOneTransaction = async (userId) => {
     try {
-        const response = await axios.get(`http://127.0.0.1:5000/api/transactions/one/${userId}`);
+        const response = await axios.get(`${api}/api/transactions/one/${userId}`);
         return response;
     } catch (error) {
         throw error;
