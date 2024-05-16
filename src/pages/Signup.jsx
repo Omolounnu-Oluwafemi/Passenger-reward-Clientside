@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button, Container, Spinner, Alert } from 'react-bootstrap';
+import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import { registerUser } from '../api/api.jsx';
 import Modals from '../components/Modals.jsx';
 import "./../App.css";
@@ -80,15 +80,15 @@ function Signup() {
                 body={errors.submit ? errors.submit : "You have successfully signed up! You will now be redirected to the login page."}
                 hasBackButton={!!errors.submit}
             />
-            <Container fluid className="d-flex align-items-center justify-content-center bg-secondary text-white" style={{ minHeight: "100vh" }}>
+            <Container fluid className="d-flex align-items-center justify-content-center custom-form text-white" style={{ minHeight: "100vh" }}>
                 <div className="w-100 form-shadow px-5 py-0 pt-5 mt-5" style={{ maxWidth: "600px" }}>
                     <h1>Signup</h1>
                     <h5>Join the train of Passengers that gets reward from their every trip🎁</h5>
                     <Form onSubmit={handleSubmit} className='mt-4'>
                         <Form.Group controlId="formBasicEmail" className='mb-2'>
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control className="form-control-lg" type="email" placeholder="Enter email" name="email" value={formData.email} onChange={handleChange} />
-                            {errors.email && <Alert variant="danger">{errors.email}</Alert>}
+                            <Form.Control className={`form-control-lg ${errors.email && 'is-invalid'}`} type="email" placeholder="Enter email" name="email" value={formData.email} onChange={handleChange} />
+                            <div className="invalid-feedback">{errors.email}</div>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicFirstName" className='mb-2'>
@@ -103,14 +103,14 @@ function Signup() {
 
                         <Form.Group controlId="formBasicPassword" className='mb-2'>
                             <Form.Label>Password</Form.Label>
-                            <Form.Control className="form-control-lg" type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
-                            {errors.password && <Alert variant="danger">{errors.password}</Alert>}
+                            <Form.Control className={`form-control-lg ${errors.password && 'is-invalid'}`} type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
+                            <div className="invalid-feedback">{errors.password}</div>
                         </Form.Group>
                         <Form.Group controlId="formBasicConfirmPassword" className='mb-2'>
                             <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control className="form-control-lg" type="password" placeholder="Confirm Password" name="passwordConfirm" value={formData.passwordConfirm} onChange={handleChange} />
-                            {errors.passwordConfirm && <Alert variant="danger">{errors.passwordConfirm}</Alert>}
-                            {errors.passwordMatch && <Alert variant="danger">{errors.passwordMatch}</Alert>}
+                            <Form.Control className={`form-control-lg ${errors.passwordConfirm && 'is-invalid'}`} type="password" placeholder="Confirm Password" name="passwordConfirm" value={formData.passwordConfirm} onChange={handleChange} />
+                            <div className="invalid-feedback">{errors.passwordConfirm}</div>
+                            {errors.passwordMatch && <div className="invalid-feedback">{errors.passwordMatch}</div>}
                         </Form.Group>
 
                         <Button variant="primary" type="submit" className='mt-4 w-100 p-3' disabled={isLoading}>
