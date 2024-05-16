@@ -1,11 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import UserProvider from './api/api';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Signup from './pages/Signup'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import NewTrip from './pages/NewTrip'
 import Layout from './components/Layout'
+
+if (import.meta.env.VITE_ENV === "production") {
+  axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+} else {
+  axios.defaults.baseURL = import.meta.env.VITE_LOCALBASE_URL;
+}
 
 function App() {
 

@@ -1,8 +1,8 @@
 /* eslint-disable no-useless-catch */
-import axios from 'axios';
 import { createContext } from 'react';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 export const UserContext = createContext({
   userId: null,
@@ -19,10 +19,11 @@ export default function UserProvider({ children }) {
   );
 }
 
-const api = 'https://passenger-reward.onrender.com';
+// const api = 'https://passenger-reward.onrender.com';
+// const api = 'http://127.0.0.1:5000';
 export const registerUser = async (formData) => {
     try {
-        const response = await axios.post(`${api}/api/users/signup`, formData,
+        const response = await axios.post(`/api/users/signup`, formData,
             { headers: { 'Content-Type': 'application/json' } },
         );
         return response;
@@ -33,7 +34,7 @@ export const registerUser = async (formData) => {
 };
 export const loginUser = async (formData) => {
     try {
-        const response = await axios.post(`${api}/api/users/signin`, formData, { withCredentials: true });
+        const response = await axios.post(`/api/users/signin`, formData, { withCredentials: true });
         return response;
     } catch (error) {
         console.log(error.response.data);
@@ -44,7 +45,7 @@ export const newTransaction = async (userData) => {
     const userId = userData.userId;
 
     try {
-        const response = await axios.post('http://127.0.0.1:5000/api/transactions/new/userId', userData);
+        const response = await axios.post('/api/transactions/new/userId', userData);
         return response.data;
     } catch (error) {
         throw error;
@@ -52,7 +53,7 @@ export const newTransaction = async (userData) => {
 };
 export const getTransactions = async (userId) => {
     try {
-        const response = await axios.get(`http://127.0.0.1:5000/api/transactions/${userId}/all`);
+        const response = await axios.get(`/api/transactions/${userId}/all`);
         return response;
     } catch (error) {
         console.log(error.response.data);
