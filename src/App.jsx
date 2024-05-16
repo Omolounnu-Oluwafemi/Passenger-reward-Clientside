@@ -8,11 +8,11 @@ import Dashboard from './pages/Dashboard'
 import NewTrip from './pages/NewTrip'
 import Layout from './components/Layout'
 
-if (import.meta.env.VITE_ENV === "production") {
-  axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
-} else {
-  axios.defaults.baseURL = import.meta.env.VITE_LOCALBASE_URL;
-}
+// if (import.meta.env.VITE_ENV === "production") {
+//   axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+// } else {
+//   axios.defaults.baseURL = import.meta.env.VITE_LOCALBASE_URL;
+// }
 
 function App() {
 

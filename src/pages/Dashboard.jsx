@@ -34,6 +34,7 @@ function Dashboard() {
             if (userId) {
                 try {
                     const response = await getTransactions(userId);
+                    
                     if (response.data.status === 200 && response.data.transactions) {
                         const data = response.data;
                         const totalCashBack = data.totalCashBack;

@@ -38,6 +38,7 @@ export default function UserProvider({ children }) {
 
 const api = 'https://passenger-reward.onrender.com';
 
+// const api = 'http://127.0.0.1:5000'
 
 export const registerUser = async (formData) => {
     try {
@@ -52,7 +53,6 @@ export const registerUser = async (formData) => {
     }
 };
 
-// const api = 'http://127.0.0.1:5000'
 export const loginUser = async (formData) => {
     try {
         const response = await axios.post(`${api}/api/users/signin`, formData, { withCredentials: true });
@@ -65,9 +65,7 @@ export const newTransaction = async (userData) => {
     const { userId, ...transactionData } = userData;
 
     try {
-        const response = await axios.post(`${api}/api/transactions/new/${userId}`, transactionData, {
-            withCredentials: true,
-        });
+        const response = await axios.post(`${api}/api/transactions/new/${userId}`, transactionData);
         return response.data;
     } catch (error) {
         throw error;
@@ -75,12 +73,10 @@ export const newTransaction = async (userData) => {
 };
 export const getTransactions = async (userId) => {
     try {
-        const response = await axios.get(`${api}/api/transactions/${userId}/all`, {
-            withCredentials: true,
-        });
+        const response = await axios.get(`${api}/api/transactions/${userId}/all`);
         return response;
     } catch (error) {
-        console.log(error.response.data);
+        // console.log(response);
         throw error;
     }
 };
