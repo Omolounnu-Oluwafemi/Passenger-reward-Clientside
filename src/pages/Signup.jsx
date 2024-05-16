@@ -2,9 +2,10 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import {Link, useNavigate } from 'react-router-dom'
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import { registerUser } from '../api/api.jsx';
 import Modals from '../components/Modals.jsx'
+import "./../App.css"
 
 function Signup() {
     const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ function Signup() {
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -25,6 +27,7 @@ function Signup() {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
         const response = await registerUser(formData);
         if (response.status === 200 && !response.data.error) {
@@ -41,6 +44,7 @@ const handleSubmit = async (e) => {
         setErrors(error.response.data.error || error.response.data.message);
         setSuccess(null);
     }
+    setIsLoading(false);
     setShowModal(true);
 }
 
@@ -60,8 +64,8 @@ const handleSubmit = async (e) => {
             body={errors ? errors : "You have successfully signed up! You will now be redirected to the login page."}
             hasBackButton={!!errors}
         />
-        <Container fluid className="d-flex align-items-center justify-content-center bg-success" style={{ minHeight: "100vh" }}>
-            <div className="w-100" style={{ maxWidth: "600px" }}>
+        <Container fluid className="d-flex align-items-center justify-content-center bg-secondary text-white" style={{ minHeight: "100vh" }}>
+            <div className="w-100 form-shadow px-5 py-0 pt-5" style={{ maxWidth: "600px" }}>
                 <h1>Signup</h1>
                 <h5>Join the train of Passengers that gets reward from their every trip🎁</h5>
                 <Form onSubmit={handleSubmit} className='mt-4'>
@@ -89,8 +93,8 @@ const handleSubmit = async (e) => {
                         <Form.Control className="form-control-lg" type="password" placeholder="Confirm Password" name="passwordConfirm" value={formData.passwordConfirm} onChange={handleChange} />
                     </Form.Group>
 
-                    <Button variant="primary" type="submit" className='mt-4 w-100 p-3'>
-                        Submit
+                    <Button variant="primary" type="submit" className='mt-4 w-100 p-3' disabled={isLoading}>
+                        {isLoading ? <Spinner animation="border" size="sm" /> : "Submit"}
                     </Button>
                         <p className="text-center mt-3">
                             Already have an account? <Link to="/login"className='text-decoration-none' >Log in</Link>

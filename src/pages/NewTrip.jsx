@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { useState, useContext } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Spinner } from 'react-bootstrap';
 import yourImage from '../assets/travels.jpg';
 import { useNavigate } from 'react-router-dom';
 import Modals from '../components/Modals.jsx';
@@ -16,6 +17,7 @@ function TripForm() {
     const [errors, setErrors] = useState(null);
     const [success, setSuccess] = useState(null);
     const [modalMessage, setModalMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const { userId } = useContext(UserContext);
 
@@ -25,6 +27,7 @@ function TripForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const response = await newTransaction({
                 userId,
@@ -35,7 +38,6 @@ function TripForm() {
             console.log('Full response:', response);
 
             if (response.status === 201) {
-                console.log('Transaction created:', response.message);
                 setSuccess(response.message || 'Transaction created successfully');
                 setErrors(null);
                 localStorage.setItem('pickupPoint', formData.pickupPoint);
@@ -45,13 +47,12 @@ function TripForm() {
                 handleError(response);
             }
         } catch (error) {
-            console.error('Error in catch block:', error);
             handleError(error.response ? error.response : { message: error.message });
         }
+        setIsLoading(false);
     }
 
     const handleError = (response) => {
-        console.error('Error response:', response);
 
         const errorMessage = response.error || response.message || 'An error occurred';
         setErrors(errorMessage);
@@ -65,7 +66,7 @@ function TripForm() {
     }
 
     return (
-        <>
+        < >
             <Modals 
                 showModal={showModal} 
                 handleClose={handleClose} 
@@ -73,12 +74,12 @@ function TripForm() {
                 hasBackButton={false} 
             />
       
-            <Container fluid className="d-flex align-items-center justify-content-center bg-success" style={{ minHeight: "100vh" }}>
-                <Row className="w-100" style={{ maxWidth: "1200px" }}>
+    <Container fluid className="d-flex align-items-center justify-content-center " style={{ minHeight: "90vh" }}>
+                <Row className="w-100 form-shadow p-lg-5 p-3 rounded" style={{ maxWidth: "1200px" }}>
                     <Col md={6}>
                         <h1>Trip Details</h1>
                         <h5>Enter your trip details to calculate the fare🎁</h5>
-                        <Form onSubmit={handleSubmit} className='mt-4'>
+                        <Form onSubmit={handleSubmit} className='mt-4 '>
                             <Form.Group controlId="formPickupPoint" className='mb-2'>
                                 <Form.Label>Pickup Point</Form.Label>
                                 <Form.Control className="form-control-lg" type="text" placeholder="Enter pickup point" name="pickupPoint" value={formData.pickupPoint} onChange={handleChange} />
@@ -99,12 +100,12 @@ function TripForm() {
                                 <Form.Control className="form-control-lg" type="number" placeholder="Enter trip amount" name="tripAmount" value={formData.tripAmount} onChange={handleChange} />
                             </Form.Group>
 
-                            <Button variant="primary" type="submit" className='mt-4 w-100 p-3'>
-                                Submit
-                            </Button>
+                         <Button variant="primary" type="submit" className='mt-4 w-100 p-3' disabled={isLoading}>
+                        {isLoading ? <Spinner animation="border" size="sm" /> : "Login"}
+                    </Button>
                         </Form>
                     </Col>
-                    <Col md={6}>
+                    <Col md={6} className="d-none d-md-block">
                         <img src={yourImage} alt="Your description" className="img-fluid" />
                     </Col>
                 </Row>

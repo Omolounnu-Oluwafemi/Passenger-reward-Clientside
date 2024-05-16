@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import { loginUser, UserContext } from '../api/api.jsx';
 import Modals from '../components/Modals.jsx'
+import "./../App.css"
 
 function Login() {
     const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ function Login() {
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
      const { setUserId } = useContext(UserContext);
 
@@ -21,7 +23,8 @@ function Login() {
     }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+      e.preventDefault();
+      setIsLoading(true)
     try {
         const response = await loginUser(formData)
         if (response.status === 200) {
@@ -38,7 +41,8 @@ function Login() {
         console.error(error.response.data);
         setErrors(error.response.data.message);
         setSuccess(null);
-        }
+    }
+      setIsLoading(false);
       setShowModal(true);
   }
     
@@ -66,8 +70,8 @@ function Login() {
         hasBackButton={!!errors}
         />
        
-        <Container fluid className="d-flex align-items-center justify-content-center bg-success" style={{ minHeight: "100vh" }}>
-            <div className="w-100" style={{ maxWidth: "600px" }}>
+        <Container fluid className="d-flex align-items-center justify-content-center bg-secondary text-white" style={{ minHeight: "100vh" }}>
+            <div className="w-100 form-shadow px-5 py-0 pt-5" style={{ maxWidth: "600px" }}>
                 <h1>Login</h1>
                 <h5>Continue to enjoy your rewards on your every ride with us🎁</h5>
                 <Form onSubmit={handleSubmit} className='mt-4'>
@@ -81,8 +85,8 @@ function Login() {
                         <Form.Control className="form-control-lg" type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
                     </Form.Group>
 
-                    <Button variant="primary" type="submit" className='mt-4 w-100 p-3'>
-                        Submit
+                   <Button variant="primary" type="submit" className='mt-4 w-100 p-3' disabled={isLoading}>
+                        {isLoading ? <Spinner animation="border" size="sm" /> : "Login"}
                     </Button>
 
                          <p className="text-center mt-3 ">

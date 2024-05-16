@@ -23,7 +23,7 @@ function Layout() {
                         </Navbar.Collapse>
                     </Navbar>
                 </Col>
-                <Col className="col-lg-1 p-0 d-none d-lg-block">
+                <Col className="col-lg-2 p-0 d-none d-lg-block">
                     <SideBar />
                 </Col>
                 <Col>

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Container, Row, Col, Card, Table } from 'react-bootstrap'
+import { Container, Row, Col, Card, Table, Spinner } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 import { FaMoneyBillWave } from 'react-icons/fa';
 import '../App.css';
@@ -44,7 +44,6 @@ function Dashboard() {
                         setTransactions(data.transactions);
                         setTotalCashBack(totalCashBack);
                         setTotalMilesPoints(totalMilesPoints);
-                        console.log(response.data.transactions); 
                     } else {
                         if (response.data.message === 'No transactions found for this user yet. You should navigate to the new Trip page to get claiming your rewards') {
                             setModalMessage(response.data.message);
@@ -95,7 +94,7 @@ function Dashboard() {
                                                 <Card.Title>Total earnings</Card.Title>
                                             </Col>
                                         </Row>
-                                        <h1 className='mt-5'>{isLoading ? 'Loading...' : `$${totalCashBack}`}</h1>
+                                        <h1 className='mt-5'>{isLoading ? <Spinner animation="border" /> : `$${totalCashBack}`}</h1>
                                         <Card.Text>Last earned 3 days ago</Card.Text>
                                     </Card.Body>
                                 </Card>
@@ -113,7 +112,7 @@ function Dashboard() {
                                                 <Card.Title>Total Cash Back</Card.Title>
                                             </Col>
                                         </Row>
-                                        <h1 className='mt-5'>{isLoading ? 'Loading...' : `$${totalCashBack}`}</h1>
+                                        <h1 className='mt-5'>{isLoading ? <Spinner animation="border" />: `$${totalCashBack}`}</h1>
                                         <Card.Text>Last earned 3 days ago</Card.Text>
                                     </Card.Body>
                                 </Card>
@@ -129,7 +128,7 @@ function Dashboard() {
                                                 <Card.Title>Total Miles Points</Card.Title>
                                             </Col>
                                         </Row>
-                                        <h1 className='mt-5'>{isLoading ? 'Loading...' : `$${totalMilesPoints}`}</h1>
+                                        <h1 className='mt-5'>{isLoading ? <Spinner animation="border" /> : `$${totalMilesPoints}`}</h1>
                                         <Card.Text>Last earned 3 days ago</Card.Text>
                                     </Card.Body>
                                 </Card>
@@ -145,7 +144,7 @@ function Dashboard() {
                                                 <Card.Title>Total distance travelled</Card.Title>
                                             </Col>
                                         </Row>
-                                        <h1 className='mt-5'>{isLoading ? 'Loading...' : `${totalDistanceTravelled} KM`}</h1>
+                                        <h1 className='mt-5'>{isLoading ? <Spinner animation="border" /> : `${totalDistanceTravelled} KM`}</h1>
                                         <Card.Text>Moved with us 3 days ago</Card.Text>
                                     </Card.Body>
                                 </Card>
@@ -164,7 +163,6 @@ function Dashboard() {
                                 <th>Date</th>
                                 <th>Cash Back Earned</th>
                                 <th>Miles Point Earned</th>
-                                {/* <th>Trip details</th> */}
                             </tr>
                         </thead>
                         <tbody>
