@@ -9,9 +9,6 @@ export const UserContext = createContext({
   setUserId: () => {},
 });
 
-
-
-
 export default function UserProvider({ children }) {
   const [userId, setUserId] = useState(null);
 
@@ -22,12 +19,10 @@ export default function UserProvider({ children }) {
   );
 }
 
-// export default UserProvider;
-
 const api = 'https://passenger-reward.onrender.com';
 export const registerUser = async (formData) => {
     try {
-        const response = await axios.post(`http://127.0.0.1:5000/api/users/signup`, formData,
+        const response = await axios.post(`${api}/api/users/signup`, formData,
             { headers: { 'Content-Type': 'application/json' } },
         );
         return response;
@@ -38,7 +33,7 @@ export const registerUser = async (formData) => {
 };
 export const loginUser = async (formData) => {
     try {
-        const response = await axios.post('http://127.0.0.1:5000/api/users/signin', formData, { withCredentials: true });
+        const response = await axios.post(`${api}/api/users/signin`, formData, { withCredentials: true });
         return response;
     } catch (error) {
         console.log(error.response.data);
