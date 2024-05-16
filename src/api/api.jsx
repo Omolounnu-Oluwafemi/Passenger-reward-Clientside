@@ -1,7 +1,6 @@
 /* eslint-disable no-useless-catch */
-import { createContext } from 'react';
-import { useState } from 'react';
-import Cookies from 'js-cookie';
+import { useState, createContext, useEffect } from 'react';
+// import Cookies from 'js-cookie';
 import axios from 'axios';
 
 export const UserContext = createContext({
@@ -10,7 +9,25 @@ export const UserContext = createContext({
 });
 
 export default function UserProvider({ children }) {
-  const [userId, setUserId] = useState(null);
+    const [userId, setUserId] = useState(null);
+    
+
+  // Get userId from local storage when component mounts
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+  }, []);
+
+  // Store userId in local storage whenever it changes
+  useEffect(() => {
+    if (userId) {
+      localStorage.setItem('userId', userId);
+    } else {
+      localStorage.removeItem('userId');
+    }
+  }, [userId]);
 
   return (
     <UserContext.Provider value={{ userId, setUserId }}>
@@ -19,8 +36,6 @@ export default function UserProvider({ children }) {
   );
 }
 
-// const api = 'https://passenger-reward.onrender.com';
-// const api = 'http://127.0.0.1:5000';
 export const registerUser = async (formData) => {
     try {
         const response = await axios.post(`/api/users/signup`, formData,
@@ -42,10 +57,12 @@ export const loginUser = async (formData) => {
     }
 };
 export const newTransaction = async (userData) => {
-    const userId = userData.userId;
+    // const userId = userData.userId;
+
+    const { userId, ...transactionData } = userData;
 
     try {
-        const response = await axios.post('/api/transactions/new/userId', userData);
+        const response = await axios.post(`/api/transactions/new/${userId}`,  transactionData);
         return response.data;
     } catch (error) {
         throw error;

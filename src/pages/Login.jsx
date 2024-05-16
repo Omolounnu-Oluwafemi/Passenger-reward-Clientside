@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { Form, Button, Container } from 'react-bootstrap';
 import { loginUser, UserContext } from '../api/api.jsx';
@@ -25,12 +25,12 @@ function Login() {
     try {
         const response = await loginUser(formData)
         if (response.status === 200) {
-            console.log(response.data.user.userId);
             setUserId(response.data.user.userId);
+            localStorage.setItem('userId', response.data.user.userId);
             setSuccess(response.data.message);
             setErrors(null);
             } else {
-            console.error(response.data.message);
+            console.error(response.data.message); 
             setErrors(response.data.message);
             setSuccess(null);
             }
@@ -41,6 +41,13 @@ function Login() {
         }
       setShowModal(true);
   }
+    
+    useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+        setUserId(userId);
+    }
+}, []);
     
     const handleClose = () => {
         setShowModal(false);
