@@ -41,9 +41,10 @@ const api = 'https://passenger-reward.onrender.com';
 
 export const registerUser = async (formData) => {
     try {
-        const response = await axios.post(`${api}/api/users/signup`, formData,
-            { headers: { 'Content-Type': 'application/json' } },
-        );
+        const response = await axios.post(`${api}/api/users/signup`, formData, {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
+        });
         return response;
     } catch (error) {
         console.log(error.response.data);
@@ -61,12 +62,12 @@ export const loginUser = async (formData) => {
     }
 };
 export const newTransaction = async (userData) => {
-    // const userId = userData.userId;
-
     const { userId, ...transactionData } = userData;
 
     try {
-        const response = await axios.post(`${api}/api/transactions/new/${userId}`,  transactionData);
+        const response = await axios.post(`${api}/api/transactions/new/${userId}`, transactionData, {
+            withCredentials: true,
+        });
         return response.data;
     } catch (error) {
         throw error;
@@ -74,7 +75,9 @@ export const newTransaction = async (userData) => {
 };
 export const getTransactions = async (userId) => {
     try {
-        const response = await axios.get(`${api}/api/transactions/${userId}/all`);
+        const response = await axios.get(`${api}/api/transactions/${userId}/all`, {
+            withCredentials: true,
+        });
         return response;
     } catch (error) {
         console.log(error.response.data);
