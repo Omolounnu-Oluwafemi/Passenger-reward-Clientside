@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Container, Row, Col, Card, Table } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 import { FaMoneyBillWave } from 'react-icons/fa';
@@ -17,9 +18,18 @@ function Dashboard() {
     const [isLoading, setIsLoading] = useState(true);
     const [totalCashBack, setTotalCashBack] = useState(0);
     const [totalMilesPoints, setTotalMilesPoints] = useState(0);
+    const [pickupPoint, setPickupPoint] = useState('');
+    const [dropOffPoint, setDropOffPoint] = useState('');
 
     useEffect(() => {
         const fetchTransaction = async () => {
+
+            const pickupPointFromStorage = localStorage.getItem('pickupPoint');
+            const dropOffPointFromStorage = localStorage.getItem('dropOffPoint');
+
+            setPickupPoint(pickupPointFromStorage);
+            setDropOffPoint(dropOffPointFromStorage);
+            
             setIsLoading(true);
             if (userId) {
                 try {
@@ -28,7 +38,6 @@ function Dashboard() {
                         const data = response.data;
                         const totalCashBack = data.totalCashBack;
                         const totalMilesPoints = data.totalMilesPoints;
-                        const lastTransaction = data.transactions[data.transactions.length - 1];
                         const totalDistanceTravelled = data.totalDistanceTravelled;
 
                         setTotalDistanceTravelled(totalDistanceTravelled);
@@ -101,7 +110,7 @@ function Dashboard() {
                                                 <FaMoneyBillWave/>
                                             </Col>
                                             <Col>
-                                                <Card.Title>Cash Back</Card.Title>
+                                                <Card.Title>Total Cash Back</Card.Title>
                                             </Col>
                                         </Row>
                                         <h1 className='mt-5'>{isLoading ? 'Loading...' : `$${totalCashBack}`}</h1>
@@ -117,7 +126,7 @@ function Dashboard() {
                                                 <FaMoneyBillWave/>
                                             </Col>
                                             <Col>
-                                                <Card.Title>Miles Points</Card.Title>
+                                                <Card.Title>Total Miles Points</Card.Title>
                                             </Col>
                                         </Row>
                                         <h1 className='mt-5'>{isLoading ? 'Loading...' : `$${totalMilesPoints}`}</h1>
@@ -155,7 +164,7 @@ function Dashboard() {
                                 <th>Date</th>
                                 <th>Cash Back Earned</th>
                                 <th>Miles Point Earned</th>
-                                <th>Trip details</th>
+                                {/* <th>Trip details</th> */}
                             </tr>
                         </thead>
                         <tbody>
@@ -168,7 +177,7 @@ function Dashboard() {
                                         <td>{formattedDate}</td>
                                         <td>${transaction.rewards[0].cashBack}</td>
                                         <td>${transaction.rewards[0].milesPoints}</td>
-                                        <td>{transaction.tripDetails}</td>
+                                        {/* <td>{pickupPoint} to {dropOffPoint}</td> */}
                                     </tr>
                                 );
                             })}
