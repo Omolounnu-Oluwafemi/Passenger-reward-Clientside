@@ -40,10 +40,14 @@ function Login() {
             setShowModal(true);
         }
     } catch (error) {
-        setErrors(error.response?.data?.message || 'An error occurred');
+        if (error.response.data) {  
+            setErrors(error.response.data.error || 'An error occurred');
+        } else {
+            setErrors('An error occurred'); 
+        }
         setSuccess(null);
         setShowModal(true);
-    }
+        }
     setIsLoading(false);
 };
 
