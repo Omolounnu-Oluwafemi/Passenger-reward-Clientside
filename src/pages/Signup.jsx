@@ -64,8 +64,8 @@ const handleSubmit = async (e) => {
             body={errors ? errors : "You have successfully signed up! You will now be redirected to the login page."}
             hasBackButton={!!errors}
         />
-        <Container fluid className="d-flex align-items-center justify-content-center bg-secondary text-white" style={{ minHeight: "100vh" }}>
-            <div className="w-100 form-shadow px-5 py-0 pt-5" style={{ maxWidth: "600px" }}>
+        <Container fluid className="d-flex align-items-center justify-content-center bg-secondary text-white " style={{ minHeight: "100vh" }}>
+            <div className="w-100 form-shadow px-5 py-0 pt-5 mt-5" style={{ maxWidth: "600px" }}>
                 <h1>Signup</h1>
                 <h5>Join the train of Passengers that gets reward from their every trip🎁</h5>
                 <Form onSubmit={handleSubmit} className='mt-4'>
