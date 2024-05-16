@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { useState, useContext, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import { loginUser, UserContext } from '../api/api.jsx';
-import Modals from '../components/Modals.jsx'
-import "./../App.css"
+import Modals from '../components/Modals.jsx';
+import './../App.css';
 
 function Login() {
     const [formData, setFormData] = useState({
@@ -16,84 +16,90 @@ function Login() {
     const [success, setSuccess] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-     const { setUserId } = useContext(UserContext);
+    const { setUserId } = useContext(UserContext);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+    };
 
-  const handleSubmit = async (e) => {
-      e.preventDefault();
-      setIsLoading(true)
-    try {
-        const response = await loginUser(formData)
-        if (response.status === 200) {
-            setUserId(response.data.user.userId);
-            localStorage.setItem('userId', response.data.user.userId);
-            setSuccess(response.data.message);
-            setErrors(null);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!formData.email || !formData.password) {
+            setErrors("Please fill in all fields.");
+            setShowModal(true);
+            return;
+        }
+        setIsLoading(true);
+        try {
+            const response = await loginUser(formData);
+            if (response.status === 200) {
+                setUserId(response.data.user.userId);
+                localStorage.setItem('userId', response.data.user.userId);
+                setSuccess(response.data.message);
+                setErrors(null);
+                setShowModal(true);
             } else {
-            console.error(response.data.message); 
-            setErrors(response.data.message);
-            setSuccess(null);
+                // console.error(response.data.message);
+                setErrors(response.data.message);
+                setSuccess(null);
+                setShowModal(true);
             }
         } catch (error) {
-        console.error(error.response.data);
-        setErrors(error.response.data.message);
-        setSuccess(null);
-    }
-      setIsLoading(false);
-      setShowModal(true);
-  }
-    
+            // console.error(error.response?.data || error.message);
+            setErrors(error.response?.data?.message || 'An error occurred');
+            setSuccess(null);
+            setShowModal(true);
+        }
+        setIsLoading(false);
+    };
+
     useEffect(() => {
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-        setUserId(userId);
-    }
-}, []);
-    
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+            setUserId(userId);
+        }
+    }, []);
+
     const handleClose = () => {
         setShowModal(false);
         if (!errors) {
-            navigate('/dashboard'); 
+            navigate('/dashboard');
         }
-    }
+    };
 
     return (
         <>
-        <Modals 
-        showModal={showModal} 
-        handleClose={handleClose} 
-        // title={errors ? errors : success}
-        body={errors ? errors : "You have successfully logged in! You will now be redirected to your Dashboard."}
-        hasBackButton={!!errors}
-        />
-       
-        <Container fluid className="d-flex align-items-center justify-content-center bg-secondary text-white" style={{ minHeight: "100vh" }}>
-            <div className="w-100 form-shadow px-5 py-0 pt-5" style={{ maxWidth: "600px" }}>
-                <h1>Login</h1>
-                <h5>Continue to enjoy your rewards on your every ride with us🎁</h5>
-                <Form onSubmit={handleSubmit} className='mt-4'>
-                    <Form.Group controlId="formBasicEmail" className='mb-2'>
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control className="form-control-lg" type="email" placeholder="Enter email" name="email" value={formData.email} onChange={handleChange} />
-                    </Form.Group>
+            <Modals
+                showModal={showModal}
+                handleClose={handleClose}
+                body={errors ? errors : "You have successfully logged in! You will now be redirected to your Dashboard."}
+                hasBackButton={!!errors}
+            />
 
-                    <Form.Group controlId="formBasicPassword" className='mb-2'>
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control className="form-control-lg" type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
-                    </Form.Group>
+            <Container fluid className="d-flex align-items-center justify-content-center bg-secondary text-white" style={{ minHeight: "100vh" }}>
+                <div className="w-100 form-shadow px-5 py-0 pt-5" style={{ maxWidth: "600px" }}>
+                    <h1>Login</h1>
+                    <h5>Continue to enjoy your rewards on your every ride with us🎁</h5>
+                    <Form onSubmit={handleSubmit} className='mt-4'>
+                        <Form.Group controlId="formBasicEmail" className='mb-2'>
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control className="form-control-lg" type="email" placeholder="Enter email" name="email" value={formData.email} onChange={handleChange} />
+                        </Form.Group>
 
-                   <Button variant="primary" type="submit" className='mt-4 w-100 p-3' disabled={isLoading}>
-                        {isLoading ? <Spinner animation="border" size="sm" /> : "Login"}
-                    </Button>
+                        <Form.Group controlId="formBasicPassword" className='mb-2'>
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control className="form-control-lg" type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
+                        </Form.Group>
 
-                         <p className="text-center mt-3 ">
+                        <Button variant="primary" type="submit" className='mt-4 w-100 p-3' disabled={isLoading}>
+                            {isLoading ? <Spinner animation="border" size="sm" /> : "Login"}
+                        </Button>
+
+                        <p className="text-center mt-3 ">
                             Do not have an account yet? <Link to="/" className='text-decoration-none'>Sign up</Link>
                         </p>
-                </Form>
-            </div>
+                    </Form>
+                </div>
             </Container>
         </>
     );
