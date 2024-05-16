@@ -23,35 +23,30 @@ function Login() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!formData.email || !formData.password) {
-            setErrors("Please fill in all fields.");
+    e.preventDefault();
+
+    setIsLoading(true);
+    try {
+        const response = await loginUser(formData);
+        if (response.status === 200) {
+            setUserId(response.data.user.userId);
+            localStorage.setItem('userId', response.data.user.userId);
+            setSuccess(response.data.message);
+            setErrors(null);
             setShowModal(true);
-            return;
-        }
-        setIsLoading(true);
-        try {
-            const response = await loginUser(formData);
-            if (response.status === 200) {
-                setUserId(response.data.user.userId);
-                localStorage.setItem('userId', response.data.user.userId);
-                setSuccess(response.data.message);
-                setErrors(null);
-                setShowModal(true);
-            } else {
-                // console.error(response.data.message);
-                setErrors(response.data.message);
-                setSuccess(null);
-                setShowModal(true);
-            }
-        } catch (error) {
-            // console.error(error.response?.data || error.message);
-            setErrors(error.response?.data?.message || 'An error occurred');
+        } else {
+            setErrors(response.data.message);
             setSuccess(null);
             setShowModal(true);
         }
-        setIsLoading(false);
-    };
+    } catch (error) {
+        setErrors(error.response?.data?.message || 'An error occurred');
+        setSuccess(null);
+        setShowModal(true);
+    }
+    setIsLoading(false);
+};
+
 
     useEffect(() => {
         const userId = localStorage.getItem('userId');
@@ -81,15 +76,17 @@ function Login() {
                     <h1>Login</h1>
                     <h5>Continue to enjoy your rewards on your every ride with us🎁</h5>
                     <Form onSubmit={handleSubmit} className='mt-4'>
-                        <Form.Group controlId="formBasicEmail" className='mb-2'>
+                       <Form.Group controlId="formBasicEmail" className='mb-2'>
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control className="form-control-lg" type="email" placeholder="Enter email" name="email" value={formData.email} onChange={handleChange} />
-                        </Form.Group>
+    <Form.Control className={`form-control-lg ${errors && 'is-invalid'}`} type="email" placeholder="Enter email" name="email" value={formData.email} onChange={handleChange} />
+    {errors && <div className="invalid-feedback">{errors}</div>}
+                            </Form.Group>
 
-                        <Form.Group controlId="formBasicPassword" className='mb-2'>
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control className="form-control-lg" type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
-                        </Form.Group>
+                            <Form.Group controlId="formBasicPassword" className='mb-2'>
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control className={`form-control-lg ${errors && 'is-invalid'}`} type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
+                                {errors && <div className="invalid-feedback">{errors}</div>}
+                            </Form.Group>
 
                         <Button variant="primary" type="submit" className='mt-4 w-100 p-3' disabled={isLoading}>
                             {isLoading ? <Spinner animation="border" size="sm" /> : "Login"}
